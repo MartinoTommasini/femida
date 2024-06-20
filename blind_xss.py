@@ -496,8 +496,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
     def prepareRequest(self, requestString, messageInfo=None):
         requestString = str(requestString)
-        listHeader = re.findall('([\w-]+):\s?(.*)', requestString)
-        dictRealHeaders = {x[0].lower():x[1] for x in listHeader}
+        listHeader = re.findall('([\w-]+):\s?(.*)', requestString)  # TODO: This regex is not 100% correct as it also matches the \r. I should refactor this regex.
+        dictRealHeaders = {x[0].lower():x[1].rstrip("\r") for x in listHeader} #To fix the above quickly. REMOVE THE \r here (of the \r\n)
 
         selectedPayloads = {}
         for ind, k in enumerate(self._dictPayloads):
